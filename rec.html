@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Advanced Recommendation System</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #00c6ff, #0072ff);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            width: 85%;
+            max-width: 850px;
+            background: rgba(0,0,0,0.85);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 0 25px black;
+            text-align: center;
+        }
+
+        select, button {
+            padding: 10px;
+            margin: 10px;
+            font-size: 16px;
+            border-radius: 8px;
+            border: none;
+        }
+
+        button {
+            background: #ffcc00;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #ff9900;
+        }
+
+        #results {
+            margin-top: 20px;
+            background: rgba(255,255,255,0.1);
+            padding: 15px;
+            border-radius: 10px;
+            min-height: 100px;
+            text-align: left;
+        }
+
+        .item {
+            margin: 5px 0;
+        }
+
+        #foodTypeDiv {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>🎯 Smart Recommendation System</h1>
+
+    <select id="mood">
+        <option value="">Select Mood</option>
+        <option value="Happy">Happy 😊</option>
+        <option value="Sad">Sad 😔</option>
+        <option value="Romantic">Romantic ❤️</option>
+        <option value="Adventurous">Adventurous 🔥</option>
+        <option value="Relax">Relax 🌿</option>
+    </select>
+
+    <select id="category" onchange="checkCategory()">
+        <option value="">Select Category</option>
+        <option value="movies">Movies</option>
+        <option value="books">Books</option>
+        <option value="food">Food</option>
+        <option value="places">Places (Hyderabad)</option>
+    </select>
+
+    <div id="foodTypeDiv">
+        <select id="foodType">
+            <option value="">Select Food Type</option>
+            <option value="sweet">Sweet</option>
+            <option value="hot">Hot</option>
+            <option value="dessert">Dessert</option>
+        </select>
+    </div>
+
+    <br>
+    <button onclick="recommend()">Get Recommendation</button>
+
+    <div id="results">Recommendations will appear here...</div>
+</div>
+
+<script>
+
+const data = {
+    Happy: {
+        movies: ["3 Idiots", "Jumanji"],
+        books: ["The Alchemist", "Harry Potter"],
+        food: {
+            sweet: ["Gulab Jamun", "Rasgulla"],
+            hot: ["Pizza", "Biryani"],
+            dessert: ["Ice Cream", "Brownie"]
+        },
+        places: ["Tank Bund", "Charminar"]
+    },
+    Sad: {
+        movies: ["The Pursuit of Happyness"],
+        books: ["You Can Win"],
+        food: {
+            sweet: ["Chocolate", "Laddu"],
+            hot: ["Soup", "Maggi"],
+            dessert: ["Cupcake", "Cheesecake"]
+        },
+        places: ["Hussain Sagar", "Shilparamam"]
+    },
+    Romantic: {
+        movies: ["Titanic"],
+        books: ["Pride and Prejudice"],
+        food: {
+            sweet: ["Strawberry Cake"],
+            hot: ["Pasta"],
+            dessert: ["Chocolate Mousse"]
+        },
+        places: ["Durgam Cheruvu", "Lumbini Park"]
+    },
+    Adventurous: {
+        movies: ["Avengers"],
+        books: ["The Hobbit"],
+        food: {
+            sweet: ["Kaju Katli"],
+            hot: ["Spicy Chicken", "Grill"],
+            dessert: ["Falooda"]
+        },
+        places: ["Ramoji Film City", "Wonderla"]
+    },
+    Relax: {
+        movies: ["Life of Pi"],
+        books: ["Atomic Habits"],
+        food: {
+            sweet: ["Honey Pancake"],
+            hot: ["Green Tea"],
+            dessert: ["Fruit Salad"]
+        },
+        places: ["Nehru Zoo", "Osman Sagar"]
+    }
+};
+
+function checkCategory() {
+    let category = document.getElementById("category").value;
+    let foodDiv = document.getElementById("foodTypeDiv");
+
+    if (category === "food") {
+        foodDiv.style.display = "block";
+    } else {
+        foodDiv.style.display = "none";
+    }
+}
+
+function recommend() {
+    let mood = document.getElementById("mood").value;
+    let category = document.getElementById("category").value;
+    let foodType = document.getElementById("foodType").value;
+    let results = document.getElementById("results");
+    results.innerHTML = "";
+
+    if (!mood || !category) {
+        results.innerHTML = "⚠ Please select mood and category.";
+        return;
+    }
+
+    if (category === "food") {
+        if (!foodType) {
+            results.innerHTML = "⚠ Please select food type.";
+            return;
+        }
+
+        let items = data[mood].food[foodType];
+        items.forEach(item => {
+            results.innerHTML += `<div class="item">🍽 ${item}</div>`;
+        });
+    } else {
+        let items = data[mood][category];
+        items.forEach(item => {
+            results.innerHTML += `<div class="item">⭐ ${item}</div>`;
+        });
+    }
+}
+
+</script>
+
+</body>
+</html>
